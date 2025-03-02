@@ -1,0 +1,44 @@
+---
+- name: Install streetmerchant
+  hosts: all
+  handlers:
+    - name: Restart streetmerchant service
+      ansible.builtin.service:
+        name: streetmerchant.service
+        enabled: true
+        state: restarted
+        daemon_reload: true
+  roles:
+    - role: service_user
+  tasks:
+    - name: Ensure config directory
+      become: true
+      ansible.builtin.file:
+        path: "{{ streetmerchant_config_dir }}"
+        state: directory
+        owner: "{{ service_user_name }}"
+        group: "{{ service_user_name }}"
+        mode: "2775"
+
+    - name: Template streetmerchant config files
+      become: true
+      notify: Restart streetmerchant service
+      loop:
+        - docker-compose.yml
+        - streetmerchant.env
+      ansible.builtin.template:
+        src: "{{ item }}.j2"
+        dest: "{{ streetmerchant_config_dir }}/{{ item }}"
+        owner: "{{ service_user_name }}"
+        group: "{{ service_user_name }}"
+        mode: "750"
+
+    - name: Template service file
+      become: true
+      notify: Restart streetmerchant service
+      ansible.builtin.template:
+        src: streetmerchant.service.j2
+        dest: /etc/systemd/system/streetmerchant.service
+        owner: root
+        group: root
+        mode: "755"

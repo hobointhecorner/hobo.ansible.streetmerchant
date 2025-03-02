@@ -1,0 +1,7 @@
+services:
+  streetmerchant:
+    image: ghcr.io/jef/streetmerchant:{{ streetmerchant_version }}
+    container_name: streetmerchant
+    env_file: streetmerchant.env
+    network_mode: container:{{ vpn_container_name }}
+    restart: unless-stopped

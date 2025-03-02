@@ -1,0 +1,18 @@
+[Unit]
+Description=streetmerchant
+After=docker.service
+Requires=docker-vpn.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+User={{ service_user_name }}
+Group={{ service_user_name }}
+WorkingDirectory={{ streetmerchant_config_dir }}
+ExecStartPre=/usr/bin/docker compose pull --ignore-pull-failures
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecReload=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
+
+[Install]
+WantedBy=multi-user.target

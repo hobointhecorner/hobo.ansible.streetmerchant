@@ -1,0 +1,51 @@
+---
+all:
+  vars:
+    # Playbook config
+    streetmerchant_config_dir: /srv/streetmerchant
+    streetmerchant_version: latest # latest || nightly
+    vpn_container_name: docker-vpn # Use the network stack from container 'docker-vpn'
+
+    # https://github.com/hobointhecorner/hobo.ansible.service_user
+    service_user_name: streetmerchant
+    service_user_additional_groups: ['docker']
+
+    # Streetmerchant config
+    config_instockwaittime: 1800
+    config_addtocart: 'false'
+    config_lowbandwidth: 'false'
+    config_openbrowser: 'false'
+    config_pagebackoff_min: 10000
+    config_pagebackoff_max: 3600000
+    config_pagesleep_min: 10000
+    config_pagesleep_max: 20000
+    config_pagetimeout: 45000
+
+    # Filters
+    filter_brands:
+      - nvidia
+    filter_models:
+      - founders edition
+    filter_series:
+      - 5090
+    filter_stores:
+      - bestbuy
+      - newegg
+      - walmart
+
+    filter_series_maxprice:
+      5090: 2500
+
+    # Notifications
+    ## Discord
+    notif_discord_webhook:
+    notif_discord_groupid:
+
+    ## Email/SMS
+    notif_email_to:
+    notif_email_username:
+    notif_email_password:
+    notif_sms_carrier:
+    notif_sms_number:
+    notif_smtp_address:
+    notif_smtp_port:
